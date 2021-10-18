@@ -1,0 +1,3 @@
+/api/* https://blog2-api-demo.herokuapp.com/api/:splat 200
+
+/* /index.html 200 
