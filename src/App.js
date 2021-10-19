@@ -1,19 +1,20 @@
 import { useContext } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/header/Header";
 import { Context } from "./context/Context";
+import ContactUs from "./pages/contactUs/ContactUs";
 import Homepage from "./pages/homepage/Homepage";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Settings from "./pages/settings/Settings";
 import Single from "./pages/single/Single";
-import Write from "./pages/write/Write"
-import ContactUs from "./pages/contactUs/ContactUs"
+import Write from "./pages/write/Write";
 
 
 function App() {
   const { user } = useContext(Context);
   console.log(user);
+
   return (
     <>
       <Router>

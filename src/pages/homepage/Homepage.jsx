@@ -1,10 +1,10 @@
-import Banner from '../../components/banner/Banner'
-import Sidebar from '../../components/sidebar/Sidebar'
-import Posts from '../../components/posts/Posts'
-import "./homepage.css"
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
+import { blogApi } from '../../api/blogApi'
+import Banner from '../../components/banner/Banner'
+import Posts from '../../components/posts/Posts'
+import Sidebar from '../../components/sidebar/Sidebar'
+import "./homepage.css"
 
 
 
@@ -15,8 +15,8 @@ export default function Homepage() {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const res = await axios.get("/posts" + search)
-            setPosts(res.data)
+            const res = await blogApi.getPosts("" + search);
+            setPosts(res)
         }
         fetchPosts();
     }, [search])

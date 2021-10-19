@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { blogApi } from '../../api/blogApi';
 import './register.css';
-import axios from 'axios'
 
 
 export default function Register() {
@@ -13,12 +13,12 @@ export default function Register() {
         e.preventDefault();
         setErr(false);
         try {
-            const res = await axios.post("/auth/register", {
+            const res = await blogApi.register({
                 username,
                 email,
                 password,
             });
-            res.data && window.location.replace("/login");
+            res && window.location.replace("/login");
         } catch (error) {
             setErr(true)
             console.log(error)

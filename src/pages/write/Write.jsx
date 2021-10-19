@@ -1,10 +1,10 @@
-import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { Context } from "../../context/Context";
 import Select from 'react-select';
-
+import { blogApi } from '../../api/blogApi';
+import { Context } from "../../context/Context";
 import "./write.css";
+
 
 export default function Write() {
     const photoDir = "https://blog2-api-demo.herokuapp.com/images/"
@@ -35,9 +35,9 @@ export default function Write() {
     console.log(selectedCat)
     useEffect(() => {
         const fetchCat = async () => {
-            const res = await axios.get("/categories")
-            setCategory(getCat(res.data))
-            console.log(getCat(res.data))
+            const res = await blogApi.getCategories()
+            setCategory(getCat(res))
+            console.log(getCat(res))
 
         }
         fetchCat()
@@ -45,11 +45,11 @@ export default function Write() {
 
     useEffect(() => {
         const getPost = async () => {
-            const res = await axios.get("/posts/" + path);
-            setPost(res.data)
-            setTitle(res.data.title)
-            setDesciption(res.data.description)
-            setSelectedCat(res.data.categories[0])
+            const res = await blogApi.getPosts(`/${path}`);
+            setPost(res)
+            setTitle(res.title)
+            setDesciption(res.description)
+            setSelectedCat(res.categories[0])
             setEditMode(true);
         }
         if (path) {
@@ -73,15 +73,15 @@ export default function Write() {
             photo.append("file", file);
             post.photo = filename;
             try {
-                await axios.post("/upload", photo);
+                await blogApi.uploadFile(photo);
             } catch (error) {
                 console.log(error)
             }
         }
 
         try {
-            const res = await axios.post("/posts", post)
-            window.location.replace("/posts/" + res.data._id);
+            const res = await blogApi.createPost(post);
+            window.location.replace("/posts/" + res._id);
         } catch (error) {
             console.log(error)
         }
@@ -104,22 +104,22 @@ export default function Write() {
             post.photo = filename;
             post.username = user.username
             try {
-                await axios.post("/upload", photo);
+                await blogApi.uploadFile(photo);
             } catch (error) {
                 console.log(error)
             }
         }
 
         try {
-            const res = await axios.put(`/posts/${path}`, {
+            const res = await blogApi.updatePost(path, {
                 username: user.username,
                 title: post.title,
                 description: post.description,
                 photo: post.photo,
                 categories: post.categories
             });
-            console.log(res.data)
-            window.location.replace("/posts/" + res.data._id);
+            console.log(res)
+            window.location.replace("/posts/" + res._id);
         } catch (error) {
             console.log(error)
         }

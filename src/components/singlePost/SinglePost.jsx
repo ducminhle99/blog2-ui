@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import "./singlePost.css"
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from "react-router";
-import axios from "axios";
+import { Link } from 'react-router-dom';
+import { blogApi } from '../../api/blogApi';
 import { Context } from '../../context/Context';
+import "./singlePost.css";
 
 
 export default function SinglePost() {
@@ -15,17 +15,15 @@ export default function SinglePost() {
 
     useEffect(() => {
         const getPost = async () => {
-            const res = await axios.get("/posts/" + path);
-            setPost(res.data)
+            const res = await blogApi.getPosts(`/${path}`);
+            setPost(res)
         }
         getPost()
     }, [path])
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`/posts/${post._id}`, {
-                data: { username: user.username },
-            });
+            await blogApi.deletePost(path, user.username)
             window.location.replace("/");
         } catch (err) {
 

@@ -1,8 +1,8 @@
-import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Context } from '../../context/Context';
 import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
+import { blogApi } from '../../api/blogApi';
+import { Context } from '../../context/Context';
 import "./sidebar.css";
 
 export default function Sidebar() {
@@ -16,14 +16,14 @@ export default function Sidebar() {
     const path = location.pathname.split("/")[2] ? location.pathname.split("/")[2] : null
     useEffect(() => {
         const fetchCat = async () => {
-            const res = await axios.get("/categories")
-            setCategory(res.data)
+            const res = await blogApi.getCategories();
+            setCategory(res)
         }
         fetchCat()
 
         const fetchUsername = async () => {
-            const nameRes = await axios.get("/posts/" + path);
-            setName(nameRes.data.username)
+            const nameRes = await blogApi.getPosts(`/${path}`);
+            setName(nameRes.username)
         }
         if (path) fetchUsername();
     }, [path])
@@ -31,13 +31,12 @@ export default function Sidebar() {
 
     useEffect(() => {
         const getPhoto = async () => {
-            const photoRes = await axios.get(`/users?user=${name}`)
-            setPhoto(photoRes.data.avatar)
-            console.log(photoRes.data)
+            const photoRes = await blogApi.getUserByUsername(name);
+            setPhoto(photoRes.avatar)
+            console.log(photoRes)
         }
         if (name) getPhoto()
     }, [name])
-
 
     console.log(name)
     return (

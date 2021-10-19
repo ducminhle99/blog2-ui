@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { blogApi } from '../../api/blogApi';
 import { Context } from '../../context/Context';
 import "./login.css";
 
@@ -15,11 +15,11 @@ export default function Login() {
         setErr(false);
         dispatch({ type: "LOGIN_START" });
         try {
-            const res = await axios.post("/auth/login", {
+            const res = await blogApi.login({
                 username: userRef.current.value,
                 password: passwordRef.current.value,
             });
-            dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+            dispatch({ type: "LOGIN_SUCCESS", payload: res });
         } catch (err) {
             dispatch({ type: "LOGIN_FAILURE" });
             setErr(true);

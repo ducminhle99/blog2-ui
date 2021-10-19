@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
+import { blogApi } from '../../api/blogApi';
 import { Context } from '../../context/Context';
 import './settings.css';
 
@@ -29,16 +29,16 @@ export default function Settings() {
             data.append("file", file);
             updateUser.avatar = filename;
             try {
-                await axios.post("/upload", data);
+                await blogApi.uploadFile(data);
             } catch (err) {
                 dispatch({ type: "UPDATE_FAILURE" });
             }
         }
         try {
-            const res = await axios.put("/users/" + user._id, updateUser);
-            console.log(res.data)
+            const res = await blogApi.updateUser(user._id, updateUser);
+            console.log(res)
             setSuccess(true)
-            dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+            dispatch({ type: "UPDATE_SUCCESS", payload: res });
             window.location.replace("/")
 
         } catch (error) {
